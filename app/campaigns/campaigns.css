@@ -1,0 +1,156 @@
+/* Campaigns page styles (layout, cards, progress, sidebar)
+	 Uses accent colors consistent with about.css/home.css */
+
+.campaign-root {
+	--accent: #0ea5a3; /* matches about.css */
+	--muted: #e6eef3;
+	font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+	color: #0f172a;
+	padding: 1rem;
+}
+
+.campaign-breadcrumb {
+	font-size: 0.95rem;
+	color: #6b7280;
+	margin-bottom: 0.5rem;
+}
+
+.campaign-grid {
+	display: grid;
+	grid-template-columns: 1fr 320px;
+	gap: 1rem;
+	align-items: start;
+}
+
+.card {
+	background: #fff;
+	border: 1px solid #eef4f6;
+	padding: 1rem;
+	border-radius: 10px;
+}
+
+.campaign-overview .overview-header h1 {
+	margin: 0 0 0.25rem 0;
+	font-size: 1.5rem;
+}
+
+.screen-creds {
+	font-size: 0.85rem;
+	color: #6b7280;
+}
+
+.goal {
+	margin-top: 1rem;
+}
+
+.goal-title {
+	font-weight: 600;
+	color: #374151;
+	margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+	height: 10px;
+	background: var(--muted);
+	border-radius: 999px;
+	overflow: hidden;
+}
+
+.progress-fill {
+	height: 100%;
+	background: linear-gradient(90deg, var(--accent), #06b6d4);
+	width: 0%;
+}
+
+.goal-label {
+	margin-top: 0.5rem;
+	color: #6b7280;
+	font-size: 0.95rem;
+}
+
+.stats-row {
+	display: flex;
+	gap: 1rem;
+	margin-top: 1.25rem;
+}
+
+.stat {
+	flex: 1;
+	text-align: center;
+}
+
+.stat-value {
+	font-weight: 700;
+	font-size: 1.25rem;
+}
+
+.stat-label {
+	font-size: 0.85rem;
+	color: #6b7280;
+}
+
+.campaign-actions h3,
+.create-campaign h3 {
+	margin: 0 0 0.75rem 0;
+}
+
+.actions-row {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+}
+
+.btn {
+	padding: 0.6rem 1rem;
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	border: 1px solid transparent;
+}
+
+.btn.primary {
+	background: var(--accent);
+	color: white;
+}
+
+.btn.outline {
+	background: transparent;
+	color: var(--accent);
+	border-color: var(--accent);
+}
+
+.create-campaign p {
+	margin: 0.5rem 0 0 0;
+	color: #6b7280;
+}
+
+.campaign-side .sidebar-block h4 {
+	margin: 0 0 0.75rem 0;
+}
+
+.season-card {
+	border: 1px solid #eef4f6;
+	padding: 0.75rem;
+	border-radius: 8px;
+	margin-bottom: 0.75rem;
+}
+
+.season-title {
+	font-weight: 700;
+}
+
+.season-desc {
+	font-size: 0.9rem;
+	color: #6b7280;
+	margin: 0.4rem 0;
+}
+
+.season-raised {
+	font-weight: 700;
+	font-size: 0.9rem;
+}
+
+@media (max-width: 880px) {
+	.campaign-grid { grid-template-columns: 1fr; }
+}
+
