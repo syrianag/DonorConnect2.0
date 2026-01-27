@@ -1,3 +1,70 @@
+/* Donors page styles (component-scoped) */
+.donors-page { min-height: 100vh; background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 50%, #eef2ff 100%); }
+.donors-header { border-bottom:1px solid #eef4f6; background: rgba(255,255,255,0.9); backdrop-filter: blur(6px); }
+.donors-container { max-width:1120px; margin:0 auto; padding:24px; }
+.donor-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+@media (max-width:900px){ .donor-grid{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:600px){ .donor-grid{ grid-template-columns: 1fr; } }
+
+.card { background:#fff; border-radius:12px; padding:20px; border:1px solid #e6edf3; box-shadow:0 6px 18px rgba(2,6,23,0.04); }
+.card .card-title{ font-weight:700; font-size:1rem; color:#0f172a; }
+/* make the stat cards more compact and add spacing */
+.stat-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:14px; }
+/* tighter layout for the small stat tiles */
+.stat-cards .card { padding:12px; border-radius:10px; min-height:72px; display:flex; flex-direction:column; justify-content:center; }
+.stat-cards .card .card-title{ font-size:0.95rem; }
+.stat-cards .card > p { font-size:1.25rem !important; margin:6px 0 0 0; }
+@media (max-width:900px){ .stat-cards{ grid-template-columns:1fr; } }
+
+.search-row { display:flex; gap:12px; align-items:center; }
+.search-input {
+	padding:10px 12px 10px 44px; /* room for the absolute search icon */
+	border:1px solid #d1d5db;
+	border-radius:12px;
+	width:100%;
+	background:#f8fbff; /* subtle blue tint for contrast */
+	color:#0f172a;
+	transition:box-shadow .12s ease, border-color .12s ease;
+}
+.search-input { box-sizing: border-box; z-index: 1; }
+.search-input::placeholder { color:#94a3b8; }
+.search-input:focus { outline: none; border-color: #93c5fd; box-shadow: 0 6px 18px rgba(59,130,246,0.08); }
+.select { padding:10px 12px; border:1px solid #d1d5db; border-radius:10px; height:44px; min-width:140px; z-index:2; background:#fff; }
+
+/* Ensure the search icon sits neatly inside the input on all sizes */
+.search-row svg { position: absolute; left:16px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; }
+
+/* Reserve space on the right so the input doesn't visually extend under the select */
+.search-input { padding-right: 180px; }
+
+.donor-card { border-radius:12px; padding:14px; border:1px solid #e6edf3; background:#fff; }
+.donor-meta{ color:#475569; font-size:0.95rem; }
+.donor-type { display:inline-block; padding:4px 8px; border-radius:999px; font-size:0.75rem; font-weight:600; }
+.donor-type.individual { background:#eff6ff; color:#1e3a8a; }
+.donor-type.corporate { background:#f5f3ff; color:#6d28d9; }
+
+.donor-stats { display:grid; grid-template-columns:1fr 1fr; gap:8px; text-align:center; margin-top:12px; }
+
+/* Modal */
+.modal-overlay { position:fixed; inset:0; background:rgba(2,6,23,0.5); display:flex; align-items:center; justify-content:center; z-index:60; }
+.modal-box {
+	background:#fff;
+	padding:16px 18px;
+	border-radius:10px;
+	width:680px;
+	max-width:92%;
+	max-height:80vh;
+	overflow:auto;
+	box-shadow:0 10px 30px rgba(2,6,23,0.18);
+	box-sizing:border-box;
+}
+.modal-header { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #eef2ff; padding-bottom:12px; margin-bottom:12px; }
+
+.form-row { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+@media (max-width:700px){ .form-row { grid-template-columns:1fr; } }
+.form-input { width:100%; padding:10px 12px; border:1px solid #d1d5db; border-radius:8px; }
+
+.footer { border-top:1px solid rgba(226,232,240,1); background:#fff; margin-top:32px; padding:24px 0; text-align:center; color:#6b7280; }
 /* Placeholder donors styles (moved to app/donors) */
 
-.donors-root{padding:24px}
+.donors-root{padding:24px} 

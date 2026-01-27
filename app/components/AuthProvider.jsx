@@ -43,20 +43,6 @@ export default function AuthProvider({ children }) {
 
   return (
     <div>
-      <div style={{borderBottom:'1px solid #eef4f6'}}>
-        <div style={{maxWidth:1100,margin:'0 auto',padding:'8px 12px',display:'flex',alignItems:'center',justifyContent:'flex-end',gap:12}}>
-          {user ? (
-            <div style={{display:'flex',gap:12,alignItems:'center'}}>
-              <div style={{fontSize:13,color:'#374151'}}>Signed in: <strong>{user.username}</strong> ({user.role})</div>
-              <button onClick={signOut} style={{padding:'6px 10px'}}>Sign out</button>
-            </div>
-          ) : (
-            // When not signed in we show nothing here so the header Sign In link is the only login entry point
-            null
-          )}
-        </div>
-      </div>
-
       <div>{children}</div>
     </div>
   );
