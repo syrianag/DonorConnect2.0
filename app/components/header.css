@@ -16,6 +16,13 @@
 .modal-overlay {
   position:fixed; inset:0; background:rgba(2,6,23,0.5); display:flex; align-items:center; justify-content:center; z-index:60;
 }
-.modal-box { background:#fff; padding:20px; border-radius:10px; width:360px; max-width:92%; box-shadow:0 10px 30px rgba(2,6,23,0.2); }
-.modal-box h3 { margin:0 0 12px 0; }
+.modal-box { background:#fff; padding:24px; border-radius:12px; width:520px; max-width:92%; box-shadow:0 6px 18px rgba(2,6,23,0.06); border:1px solid #e6edf3; }
+.modal-box h3, .modal-title { margin:0 0 12px 0; font-size:1.25rem; font-weight:700; color:#0f172a }
+
+.modal-label { display:block; margin-bottom:8px; color:#374151; font-weight:600 }
+.modal-input { width:100%; padding:10px 12px; margin-bottom:12px; border:1px solid #d1d5db; border-radius:8px; background:#fff; color:inherit }
+.modal-error { color:#dc2626; margin-bottom:8px }
+.modal-actions { display:flex; justify-content:flex-end; gap:8px }
+.modal-actions button { padding:8px 12px; border-radius:8px; border:1px solid #e6edf3; background:#fff; color:#0f172a }
+.modal-actions button.primary { background:var(--accent); color:#fff; border-color:transparent }
 

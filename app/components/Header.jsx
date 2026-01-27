@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Database } from 'lucide-react';
 import { lookupUserByEmail, verifyCredentials } from '../../RBAC/rbac';
 import './header.css';
@@ -9,7 +9,9 @@ import './header.css';
 function SignInModal({ open, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [instructorName, setInstructorName] = useState('');
   const [error, setError] = useState('');
+  const router = useRouter();
 
   if (!open) return null;
 
@@ -26,31 +28,43 @@ function SignInModal({ open, onClose }) {
     }
 
     // store user into localStorage and dispatch auth event for AuthProvider
-    const payload = { email: email.trim().toLowerCase(), username: user.username, role: user.role };
+    const payload = { email: email.trim().toLowerCase(), username: user.username, role: user.role, instructorName: instructorName.trim() || '' };
     try {
       localStorage.setItem('dc_user', JSON.stringify(payload));
       window.dispatchEvent(new CustomEvent('dc_auth'));
     } catch (err) {}
-
     onClose();
+    // redirect admin users to the admin dashboard
+    try {
+      if (payload.role && payload.role.toUpperCase() === 'ADMIN') {
+        router.push('/admin');
+      } else {
+        router.push('/');
+      }
+    } catch (e) {
+      // router might not be available in some environments; ignore
+    }
   }
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-        <h3 style={{marginTop:0}}>Sign In</h3>
+        <h3 className="modal-title">Sign In</h3>
         <form onSubmit={handleSubmit}>
-          <label style={{display:'block',marginBottom:8}}>Email</label>
-          <input value={email} onChange={(e)=>setEmail(e.target.value)} style={{width:'100%',padding:8,marginBottom:12}} />
+          <label className="modal-label">Email</label>
+          <input className="modal-input" value={email} onChange={(e)=>setEmail(e.target.value)} />
 
-          <label style={{display:'block',marginBottom:8}}>Password</label>
-          <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} style={{width:'100%',padding:8,marginBottom:12}} />
+          <label className="modal-label">Password</label>
+          <input className="modal-input" type="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
 
-          {error && <div style={{color:'red',marginBottom:8}}>{error}</div>}
+          <label className="modal-label">Instructor name (optional)</label>
+          <input className="modal-input" value={instructorName} onChange={(e)=>setInstructorName(e.target.value)} placeholder="Full name" />
 
-          <div style={{display:'flex',justifyContent:'flex-end',gap:8}}>
-            <button type="button" onClick={onClose} style={{padding:'8px 12px'}}>Cancel</button>
-            <button type="submit" style={{padding:'8px 12px'}}>Sign in</button>
+          {error && <div className="modal-error">{error}</div>}
+
+          <div className="modal-actions">
+            <button type="button" onClick={onClose}>Cancel</button>
+            <button type="submit" className="primary">Sign in</button>
           </div>
         </form>
       </div>
