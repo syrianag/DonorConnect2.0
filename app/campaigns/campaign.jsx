@@ -4,15 +4,38 @@ import React, { useEffect, useState } from 'react';
 import './campaigns.css';
 
 export default function CampaignPage() {
+  // Demo campaigns always visible
+  const DEMO_CAMPAIGNS = [
+    { id: 'demo-1', title: 'Winter Fest', description: 'Warm clothing and holiday support', goal: 50000, raised: 50000, createdAt: new Date().toISOString() },
+    { id: 'demo-2', title: 'Spring Fest', description: 'School supplies and community support', goal: 30000, raised: 15000, createdAt: new Date().toISOString() },
+    { id: 'demo-3', title: 'Summer Fest', description: 'Meal assistance and youth activities', goal: 75000, raised: 60000, createdAt: new Date().toISOString() },
+    { id: 'demo-4', title: 'Fall Fest', description: 'Harvest assistance and volunteer coordination', goal: 45000, raised: 20000, createdAt: new Date().toISOString() }
+  ];
+
+  const [savedCampaigns, setSavedCampaigns] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState({ title: '', description: '', goal: '', startDate: '', endDate: '' });
 
+  // Load campaigns from API and localStorage, merge with demo campaigns
   useEffect(() => {
+    // load saved campaigns from localStorage
+    try {
+      const raw = localStorage.getItem('dc_saved_campaigns');
+      const parsed = raw ? JSON.parse(raw) : [];
+      setSavedCampaigns(parsed);
+    } catch (e) {
+      setSavedCampaigns([]);
+    }
+
     fetch('/api/campaigns')
       .then(r => r.json())
-      .then(data => setCampaigns(data))
-      .catch(() => setCampaigns([]));
+      .then(data => {
+        setCampaigns([...(data || []), ...(JSON.parse(localStorage.getItem('dc_saved_campaigns') || '[]') || []), ...DEMO_CAMPAIGNS]);
+      })
+      .catch(() => {
+        setCampaigns([...(JSON.parse(localStorage.getItem('dc_saved_campaigns') || '[]') || []), ...DEMO_CAMPAIGNS]);
+      });
   }, []);
 
   function handleChange(e) {
@@ -46,8 +69,27 @@ export default function CampaignPage() {
         alert(saved?.error || 'Failed to save campaign');
       }
     } catch (err) {
+      // fallback: persist locally and update view so demo campaigns stay visible
       console.error(err);
-      alert('Error saving campaign');
+      const fallback = {
+        id: `local-${Date.now()}`,
+        title: form.title,
+        description: form.description,
+        goal: parseFloat(form.goal || 0),
+        raised: 0,
+        createdAt: new Date().toISOString(),
+      };
+      try {
+        const curr = JSON.parse(localStorage.getItem('dc_saved_campaigns') || '[]');
+        const next = [fallback, ...(curr || [])];
+        localStorage.setItem('dc_saved_campaigns', JSON.stringify(next));
+        setSavedCampaigns(next);
+        setCampaigns(prev => [fallback, ...prev]);
+        setModalOpen(false);
+        setForm({ title: '', description: '', goal: '', startDate: '', endDate: '' });
+      } catch (e) {
+        alert('Error saving campaign locally');
+      }
     }
   }
 
@@ -96,13 +138,15 @@ export default function CampaignPage() {
           <section className="card create-campaign">
             <h3>Existing Campaigns</h3>
             {campaigns.length === 0 && <p>No campaigns yet.</p>}
-            {campaigns.map(c => (
-              <div key={c.id} style={{marginTop:12, borderTop:'1px solid #eef4f6', paddingTop:12}}>
-                <div style={{fontWeight:700}}>{c.title}</div>
-                <div style={{color:'#6b7280',fontSize:14}}>{c.description}</div>
-                <div style={{marginTop:6,fontSize:13}}>Goal: ${c.goal?.toLocaleString?.() ?? c.goal} • Created: {new Date(c.createdAt).toLocaleDateString()}</div>
-              </div>
-            ))}
+            <div className="campaign-list">
+              {campaigns.map(c => (
+                <div key={c.id} className="campaign-card">
+                  <div className="campaign-title">{c.title}</div>
+                  <div className="campaign-desc">{c.description}</div>
+                  <div className="campaign-meta">Goal: ${c.goal?.toLocaleString?.() ?? c.goal} • Created: {c.createdAt ? new Date(c.createdAt).toLocaleDateString() : '—'}</div>
+                </div>
+              ))}
+            </div>
           </section>
         </main>
 

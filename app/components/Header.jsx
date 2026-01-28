@@ -34,13 +34,9 @@ function SignInModal({ open, onClose }) {
       window.dispatchEvent(new CustomEvent('dc_auth'));
     } catch (err) {}
     onClose();
-    // redirect admin users to the admin dashboard
+    // always redirect to the admin dashboard after sign-in
     try {
-      if (payload.role && payload.role.toUpperCase() === 'ADMIN') {
-        router.push('/admin');
-      } else {
-        router.push('/');
-      }
+      router.push('/admin');
     } catch (e) {
       // router might not be available in some environments; ignore
     }
