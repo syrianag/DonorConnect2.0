@@ -1,0 +1,17 @@
+/* Rubric page styles to match site accent and cards */
+
+.rubric-root { min-height: 100vh; background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 50%, #eef2ff 100%); padding: 3rem 0; }
+.rubric-container { max-width: 900px; margin: 0 auto; padding: 0 1rem; }
+.rubric-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+.rubric-title { font-size:1.75rem; margin:0; color:#0f172a; font-weight:700 }
+.back-link { color: var(--accent,#0ea5a3); text-decoration:none; font-weight:600 }
+.rubric-purpose { color: #6b7280; margin-bottom:1.25rem }
+
+.rubric-card { background: #fff; border-radius:12px; padding:1.5rem; border:1px solid #e6edf3; box-shadow: 0 10px 30px rgba(15,23,42,0.06); }
+.rubric-subtitle { margin-top:0; margin-bottom:0.5rem }
+.rubric-list { margin:0; padding-left:1.25rem; color:#0f172a }
+.rubric-list li { margin-bottom:0.5rem }
+
+@media (max-width:700px) {
+	.rubric-header { flex-direction:column; align-items:flex-start; gap:0.5rem }
+}

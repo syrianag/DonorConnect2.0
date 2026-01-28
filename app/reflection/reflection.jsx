@@ -20,7 +20,7 @@ function ReflectionInner({ rbac }) {
       <div className="reflection-container">
         <div className="reflection-header">
           <h1 className="reflection-title">Reflection</h1>
-          <Link href="/admin/dashboard" className="reflection-backlink">
+          <Link href="/admin" className="reflection-backlink">
             Back to Admin Dashboard
           </Link>
         </div>

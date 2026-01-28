@@ -1,11 +1,14 @@
 "use client";
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, Database, TrendingUp, Users } from 'lucide-react';
 import '../home/home.css';
 
 export default function Home() {
+	const router = useRouter();
+
 	const handleGetStarted = () => {
-		console.log('Navigate to dashboard');
+		router.push('/dashboard');
 	};
 
 	return (

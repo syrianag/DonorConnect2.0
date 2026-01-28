@@ -124,6 +124,14 @@
 	color: #6b7280;
 }
 
+/* Campaign list card layout */
+.campaign-list { display:flex; flex-direction:column; gap:1rem; margin-top:0.5rem }
+.campaign-card { background:#fff; border:1px solid #eef4f6; padding:1rem; border-radius:10px; transition: box-shadow .18s ease, transform .12s ease; }
+.campaign-card:hover { box-shadow: 0 12px 40px rgba(14,165,163,0.12); transform: translateY(-4px); }
+.campaign-card .campaign-title { font-weight:700; margin-bottom:6px }
+.campaign-card .campaign-desc { color:#6b7280; font-size:14px; margin-bottom:8px }
+.campaign-card .campaign-meta { font-size:13px; color:#475569 }
+
 .campaign-side .sidebar-block h4 {
 	margin: 0 0 0.75rem 0;
 }
