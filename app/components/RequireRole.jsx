@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { roleCanCreate, roleCanDelete, roleCanUpdate } from '../../RBAC/rbac';
 
 export default function RequireRole({ children, allowRead=true }) {
   const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(()=>{
     try{
@@ -12,14 +14,13 @@ export default function RequireRole({ children, allowRead=true }) {
     }catch(e){}
   },[]);
 
-  if (!user) {
-    return (
-      <div style={{padding:20}}>
-        <h3>Access required</h3>
-        <p>This area requires a signed-in LaunchPad staff account. Use the small sign-in box at the top-right to authenticate (demo accounts provided in project README).</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!user) {
+      try { router.push('/'); } catch (e) {}
+    }
+  }, [user, router]);
+
+  if (!user) return null;
 
   // provide helpers via context-like props by cloning children
   const perms = {

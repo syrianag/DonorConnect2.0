@@ -7,6 +7,7 @@ const USERS = {
   'taheera@launchpadphilly.org': { username: 'lpuser3', role: 'STAFF', password: 'lpuser3' },
   'admin@launchpadphilly.org': { username: 'lpadmin', role: 'ADMIN', password: 'admin' },
   'viewer@launchpadphilly.org': { username: 'lpviewer', role: 'READONLY', password: 'viewer' }
+  , 'demouser123@gmail.com': { username: 'demouser123', role: 'STAFF', password: 'lpuser1' }
 };
 
 export function lookupUserByEmail(email) {
