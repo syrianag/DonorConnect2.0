@@ -49,6 +49,7 @@ function SignInModal({ open, onClose }) {
     const payload = { email: email.trim().toLowerCase(), username: user.username, role: user.role, instructorName: instructorName.trim() || '' };
     try {
       localStorage.setItem('dc_user', JSON.stringify(payload));
+      document.cookie = `dc_user=${encodeURIComponent(JSON.stringify(payload))}; path=/; max-age=${60 * 60 * 24 * 7}`;
       window.dispatchEvent(new CustomEvent('dc_auth'));
     } catch (err) {}
     closeAndClear();
@@ -84,6 +85,7 @@ function SignInModal({ open, onClose }) {
     const payload = { email: email.trim().toLowerCase(), username, role: 'STAFF', instructorName: `${firstName} ${lastName}` };
     try {
       localStorage.setItem('dc_user', JSON.stringify(payload));
+      document.cookie = `dc_user=${encodeURIComponent(JSON.stringify(payload))}; path=/; max-age=${60 * 60 * 24 * 7}`;
       window.dispatchEvent(new CustomEvent('dc_auth'));
     } catch (err) {}
 
@@ -168,6 +170,13 @@ function SignInModal({ open, onClose }) {
             </div>
           </form>
         )}
+
+        <div className="modal-legal">
+          <p>
+            By continuing, you agree to our <a href="/terms" target="_blank" rel="noreferrer">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>.
+          </p>
+          <p className="modal-legal-small">We use demo accounts for this development build. Do not use real credentials.</p>
+        </div>
       </div>
     </div>
   );
@@ -176,6 +185,8 @@ function SignInModal({ open, onClose }) {
 export default function Header() {
   const pathname = usePathname() || '/';
   const [modalOpen, setModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const openHandler = () => setModalOpen(true);
@@ -183,12 +194,42 @@ export default function Header() {
     return () => window.removeEventListener('dc_open_signin', openHandler);
   }, []);
 
+  useEffect(() => {
+    function loadUser() {
+      try {
+        const raw = localStorage.getItem('dc_user');
+        setUser(raw ? JSON.parse(raw) : null);
+      } catch (e) {
+        setUser(null);
+      }
+    }
+    loadUser();
+    const authHandler = () => loadUser();
+    window.addEventListener('dc_auth', authHandler);
+    window.addEventListener('storage', authHandler);
+    return () => {
+      window.removeEventListener('dc_auth', authHandler);
+      window.removeEventListener('storage', authHandler);
+    }
+  }, []);
+
+  function handleLogout() {
+    try {
+      localStorage.removeItem('dc_user');
+      document.cookie = 'dc_user=; path=/; max-age=0';
+      window.dispatchEvent(new CustomEvent('dc_auth'));
+    } catch (e) {}
+    try { router.push('/'); } catch (e) {}
+  }
+
   const nav = [
     { href: '/dashboard', label: 'Dashboard' },
     
     { href: '/donations', label: 'Donations' },
     { href: '/donors', label: 'Donors' },
     { href: '/campaigns', label: 'Campaigns' },
+    { href: '/rubric', label: 'Rubric' },
+    { href: '/reflection', label: 'Reflection' },
     { href: '/ai_policy', label: 'AI Policy' },
   ];
 
@@ -200,20 +241,29 @@ export default function Header() {
           <Link href="/" className="brand-title">DonorConnect</Link>
         </div>
 
-        <nav className="site-nav">
-          {nav.map((n) => (
-            <Link
-              key={n.href}
-              href={n.href}
-              className={pathname === n.href ? 'active' : ''}
-            >
-              {n.label}
-            </Link>
-          ))}
-        </nav>
+        {user && (
+          <nav className="site-nav">
+            {nav.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                className={pathname === n.href ? 'active' : ''}
+              >
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+        )}
 
         <div className="site-actions">
-          <button className="signin" onClick={()=>setModalOpen(true)}>Sign In</button>
+          {user ? (
+            <>
+              <span className="signed-in">{user.username}</span>
+              <button className="signin" onClick={handleLogout}>Log Out</button>
+            </>
+          ) : (
+            <button className="signin" onClick={()=>setModalOpen(true)}>Sign In</button>
+          )}
         </div>
       </div>
 

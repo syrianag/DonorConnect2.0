@@ -6,7 +6,8 @@
 .brand-title { font-weight:700; font-size:1.125rem; text-decoration:none; color:inherit; }
 .site-nav a { margin-left:1rem; color:#374151; text-decoration:none; }
 .site-nav a.active { color:var(--accent,#0ea5a3); font-weight:600; }
-.signin { background:transparent; border:1px solid #e6eef3; padding:0.4rem 0.75rem; border-radius:6px; text-decoration:none; color:#374151; }
+.signin { background:#2563eb; border:1px solid #2563eb; padding:0.4rem 0.75rem; border-radius:6px; text-decoration:none; color:#fff; }
+.signin:hover { background:#1e40af; border-color:#1e40af; }
 
 @media (max-width:800px) {
   .site-header-inner { padding:0.75rem; }
@@ -47,4 +48,9 @@
 .modal-demo-item { font-size:0.95rem; color:#0f172a; display:flex; gap:6px }
 .demo-key { font-weight:700; color:#4b5563 }
 .demo-value { background:#fff; padding:4px 8px; border-radius:6px; border:1px dashed #e6edf3 }
+
+.modal-legal { margin-top:14px; border-top:1px solid #f1f5f9; padding-top:12px; color:#6b7280 }
+.modal-legal p { margin:0 0 8px 0 }
+.modal-legal a { color:#5b21b6; text-decoration:none; font-weight:600 }
+.modal-legal-small { font-size:0.85rem; color:#94a3b8 }
 
