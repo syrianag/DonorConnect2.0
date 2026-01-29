@@ -1,0 +1,13 @@
+/* Landing-specific styles separated from JSX (modal + minor overrides) */
+
+.auth-overlay {
+  backdrop-filter: blur(4px);
+}
+
+.auth-modal {
+  border-radius: 16px;
+}
+
+@media (max-width: 640px) {
+  .text-6xl { font-size: 2rem; }
+}

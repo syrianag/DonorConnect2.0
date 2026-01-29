@@ -26,3 +26,25 @@
 .modal-actions button { padding:8px 12px; border-radius:8px; border:1px solid #e6edf3; background:#fff; color:#0f172a }
 .modal-actions button.primary { background:var(--accent); color:#fff; border-color:transparent }
 
+.modal-tabs { display:flex; gap:0; border-bottom:1px solid #eef2ff; margin-bottom:12px }
+.modal-tabs button { flex:1; padding:12px 16px; background:transparent; border:0; font-weight:600; color:#374151 }
+.modal-tabs button.active { background:#f3f4ff; color:#6b21a8; border-bottom:3px solid #6b21a8 }
+
+.modal-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px }
+.modal-link { color:#5b21b6; text-decoration:none }
+
+.modal-divider { text-align:center; color:#9ca3af; margin:16px 0; position:relative }
+.modal-divider:before, .modal-divider:after { content:''; height:1px; background:#e6edf3; position:absolute; top:50%; width:38%; }
+.modal-divider:before { left:0 }
+.modal-divider:after { right:0 }
+
+.modal-socials { display:flex; gap:10px; justify-content:space-between }
+.social { flex:1; padding:10px; border-radius:8px; border:1px solid #e6edf3; background:#fff }
+
+.modal-demo { background:#fbfbff; border:1px solid #eef2ff; padding:10px; border-radius:8px; margin:12px 0 }
+.modal-demo-title { font-weight:600; margin-bottom:8px; color:#374151 }
+.modal-demo-creds { display:flex; gap:12px; flex-direction:column }
+.modal-demo-item { font-size:0.95rem; color:#0f172a; display:flex; gap:6px }
+.demo-key { font-weight:700; color:#4b5563 }
+.demo-value { background:#fff; padding:4px 8px; border-radius:6px; border:1px dashed #e6edf3 }
+
