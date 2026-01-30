@@ -16,6 +16,7 @@ export default function CampaignPage() {
   const [campaigns, setCampaigns] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState({ title: '', description: '', goal: '', startDate: '', endDate: '' });
+  const [editingId, setEditingId] = useState(null);
 
   // Load campaigns from API and localStorage, merge with demo campaigns
   useEffect(() => {
@@ -46,6 +47,43 @@ export default function CampaignPage() {
   async function handleSave() {
     if (!form.title) {
       alert('Please enter a title for the campaign');
+      return;
+    }
+    // If editing, update local copy or create a persisted update
+    if (editingId) {
+      const updated = {
+        id: editingId,
+        title: form.title,
+        description: form.description,
+        goal: parseFloat(form.goal || 0),
+        raised: 0,
+        createdAt: new Date().toISOString(),
+      };
+
+      // update in-memory list
+      setCampaigns(prev => prev.map(c => (String(c.id) === String(editingId) ? { ...c, ...updated } : c)));
+
+      // update saved local campaigns if present
+      try {
+        const curr = JSON.parse(localStorage.getItem('dc_saved_campaigns') || '[]') || [];
+        const found = curr.findIndex(x => String(x.id) === String(editingId));
+        if (found >= 0) {
+          curr[found] = { ...curr[found], ...updated };
+          localStorage.setItem('dc_saved_campaigns', JSON.stringify(curr));
+          setSavedCampaigns(curr);
+        } else {
+          // persist edited demo/API campaign as a local override
+          const next = [updated, ...curr];
+          localStorage.setItem('dc_saved_campaigns', JSON.stringify(next));
+          setSavedCampaigns(next);
+        }
+      } catch (e) {
+        console.error('failed saving edit locally', e);
+      }
+
+      setEditingId(null);
+      setModalOpen(false);
+      setForm({ title: '', description: '', goal: '', startDate: '', endDate: '' });
       return;
     }
     try {
@@ -93,6 +131,33 @@ export default function CampaignPage() {
     }
   }
 
+  function handleEdit(campaign) {
+    setEditingId(campaign.id);
+    setForm({
+      title: campaign.title || '',
+      description: campaign.description || '',
+      goal: campaign.goal || '',
+      startDate: campaign.startDate || '',
+      endDate: campaign.endDate || '',
+    });
+    setModalOpen(true);
+  }
+
+  function handleDelete(campaign) {
+    if (!confirm(`Delete campaign "${campaign.title}"? This cannot be undone in this demo.`)) return;
+    // remove from visible list
+    setCampaigns(prev => prev.filter(c => String(c.id) !== String(campaign.id)));
+    // remove from saved local campaigns if present
+    try {
+      const curr = JSON.parse(localStorage.getItem('dc_saved_campaigns') || '[]') || [];
+      const next = curr.filter(x => String(x.id) !== String(campaign.id));
+      localStorage.setItem('dc_saved_campaigns', JSON.stringify(next));
+      setSavedCampaigns(next);
+    } catch (e) {
+      console.error('failed removing from local saved campaigns', e);
+    }
+  }
+
   return (
     <div className="campaign-root">
       <nav className="campaign-breadcrumb">DonorConnect &nbsp; / &nbsp; Campaigns</nav>
@@ -131,7 +196,7 @@ export default function CampaignPage() {
           <section className="card campaign-actions">
             <h3>Campaign Actions</h3>
             <div className="actions-row">
-              <button className="btn primary" onClick={()=>setModalOpen(true)}>Create Campaign</button>
+              <button className="btn primary" onClick={()=>{ setEditingId(null); setForm({ title: '', description: '', goal: '', startDate: '', endDate: '' }); setModalOpen(true); }}>Create Campaign</button>
             </div>
           </section>
 
@@ -139,13 +204,31 @@ export default function CampaignPage() {
             <h3>Existing Campaigns</h3>
             {campaigns.length === 0 && <p>No campaigns yet.</p>}
             <div className="campaign-list">
-              {campaigns.map(c => (
-                <div key={c.id} className="campaign-card">
-                  <div className="campaign-title">{c.title}</div>
-                  <div className="campaign-desc">{c.description}</div>
-                  <div className="campaign-meta">Goal: ${c.goal?.toLocaleString?.() ?? c.goal} • Created: {c.createdAt ? new Date(c.createdAt).toLocaleDateString() : '—'}</div>
-                </div>
-              ))}
+              {(campaigns || []).map((c, idx) => {
+                const id = String(c.id ?? `local-${idx}`);
+                const title = c.title || 'Untitled Campaign';
+                const desc = c.description || '';
+                const goalVal = typeof c.goal === 'number' ? c.goal : (Number(c.goal) || 0);
+                const created = c.createdAt ? (() => {
+                  try { return new Date(c.createdAt).toLocaleDateString(); } catch { return '—'; }
+                })() : '—';
+
+                return (
+                  <div key={`${id}-${idx}`} className="campaign-card">
+                    <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:12}}>
+                      <div>
+                        <div className="campaign-title">{title}</div>
+                        <div className="campaign-desc">{desc}</div>
+                        <div className="campaign-meta">Goal: ${goalVal.toLocaleString()} • Created: {created}</div>
+                      </div>
+                      <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                        <button className="btn outline" onClick={() => handleEdit(c)}>Edit</button>
+                        <button className="btn danger" onClick={() => handleDelete(c)}>Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </section>
         </main>
@@ -184,10 +267,10 @@ export default function CampaignPage() {
       {modalOpen && (
         <div className="modal-overlay" style={{position:'fixed',inset:0,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(2,6,23,0.5)',zIndex:80}}>
           <div className="modal-box" style={{width:600,maxWidth:'92%',padding:16}}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
-              <h3 style={{margin:0}}>Create Campaign</h3>
-              <button onClick={()=>setModalOpen(false)} style={{background:'transparent',border:0,fontSize:18}}>×</button>
-            </div>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
+                <h3 style={{margin:0}}>{editingId ? 'Edit Campaign' : 'Create Campaign'}</h3>
+                <button onClick={()=>{ setModalOpen(false); setEditingId(null); }} style={{background:'transparent',border:0,fontSize:18}}>×</button>
+              </div>
 
             <div style={{display:'grid',gap:10}}>
               <label style={{fontWeight:600}}>Title</label>
@@ -208,8 +291,8 @@ export default function CampaignPage() {
               </div>
 
               <div style={{display:'flex',gap:8,justifyContent:'flex-end',marginTop:8}}>
-                <button onClick={()=>setModalOpen(false)} className="btn outline">Cancel</button>
-                <button onClick={handleSave} className="btn primary">Save Campaign</button>
+                <button onClick={()=>{ setModalOpen(false); setEditingId(null); }} className="btn outline">Cancel</button>
+                <button onClick={handleSave} className="btn primary">{editingId ? 'Update Campaign' : 'Save Campaign'}</button>
               </div>
             </div>
           </div>

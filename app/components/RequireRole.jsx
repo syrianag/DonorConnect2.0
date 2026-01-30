@@ -6,19 +6,32 @@ import { roleCanCreate, roleCanDelete, roleCanUpdate } from '../../RBAC/rbac';
 export default function RequireRole({ children, allowRead=true }) {
   const [user, setUser] = useState(null);
   const router = useRouter();
-
-  useEffect(()=>{
-    try{
-      const raw = localStorage.getItem('dc_user');
-      if (raw) setUser(JSON.parse(raw));
-    }catch(e){}
-  },[]);
-
   useEffect(() => {
-    if (!user) {
-      try { router.push('/'); } catch (e) {}
+    function loadUser() {
+      try {
+        const raw = localStorage.getItem('dc_user');
+        setUser(raw ? JSON.parse(raw) : null);
+      } catch (e) {
+        setUser(null);
+      }
     }
-  }, [user, router]);
+
+    // initial load
+    loadUser();
+
+    // open sign-in modal instead of redirecting to home when unauthenticated
+    if (!localStorage.getItem('dc_user')) {
+      try { window.dispatchEvent(new CustomEvent('dc_open_signin')); } catch (e) {}
+    }
+
+    const authHandler = () => loadUser();
+    window.addEventListener('dc_auth', authHandler);
+    window.addEventListener('storage', authHandler);
+    return () => {
+      window.removeEventListener('dc_auth', authHandler);
+      window.removeEventListener('storage', authHandler);
+    };
+  }, []);
 
   if (!user) return null;
 

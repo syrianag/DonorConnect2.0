@@ -53,7 +53,7 @@ function SignInModal({ open, onClose }) {
       window.dispatchEvent(new CustomEvent('dc_auth'));
     } catch (err) {}
     closeAndClear();
-    try { router.push('/admin'); } catch (e) {}
+    try { router.push('/dashboard'); } catch (e) {}
   }
 
   function handleSignup(e) {
@@ -90,7 +90,7 @@ function SignInModal({ open, onClose }) {
     } catch (err) {}
 
     closeAndClear();
-    try { router.push('/admin'); } catch (e) {}
+    try { router.push('/dashboard'); } catch (e) {}
   }
 
   return (

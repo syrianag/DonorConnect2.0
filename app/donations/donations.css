@@ -44,6 +44,52 @@
 
 .filters { margin: 0.75rem 0; }
 .filters-inner { display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap; }
+
+.donations-notifications {
+	max-width: 1100px;
+	margin: 0 auto 1rem;
+	display:flex;
+	flex-direction:column;
+	gap:10px;
+}
+
+/* Notification list items styled to match the screenshot */
+.dc-notification {
+	background: #fbfdff;
+	border: 1px solid #e6eef3;
+	padding: 14px 16px;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	box-shadow: 0 1px 0 rgba(15,23,42,0.02);
+}
+.dc-notification + .dc-notification { margin-top: 6px; }
+.dc-notification.missed { background: #fff7ed; }
+.dc-notification-message {
+	flex: 1 1 auto;
+	color: #0f172a;
+	font-size: 1rem;
+	line-height: 1.4;
+	padding-right: 12px;
+}
+.dc-notification-message em { color: #6b7280; font-style:normal; opacity:0.8 }
+.dc-notification-actions { flex: 0 0 auto; }
+.dc-btn-dismiss {
+	background: transparent;
+	border: 1px solid #cbd5e1;
+	padding: 6px 10px;
+	border-radius: 8px;
+	cursor: pointer;
+	color: #0f172a;
+}
+.dc-btn-dismiss:hover { background:#f3f4f6 }
+
+@media (max-width:780px) {
+	.dc-notification-message { font-size:0.95rem }
+	.dc-btn-dismiss { padding:6px 8px }
+}
 .search-wrapper { position:relative; flex:1; min-width:220px; }
 .search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; }
 .search-input { width:100%; padding:0.5rem 0.75rem 0.5rem 2.5rem; border:1px solid #dbeef5; border-radius:8px; }

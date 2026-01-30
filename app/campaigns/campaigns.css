@@ -119,6 +119,12 @@
 	border-color: var(--accent);
 }
 
+.btn.danger {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
 .create-campaign p {
 	margin: 0.5rem 0 0 0;
 	color: #6b7280;
