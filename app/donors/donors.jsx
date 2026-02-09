@@ -3,7 +3,7 @@
 
 "use client";
 
-export default function Donors() {
+export default function DonorsPage() {
   const cardRefs = useRef({});
   
   // Form state for new donor
