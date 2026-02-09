@@ -53,6 +53,9 @@ export async function POST(req) {
       return new Response(JSON.stringify({ raw: text }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    // Log the full error server-side so Vercel logs show details for debugging.
+    // Avoid leaking sensitive info to clients; return a concise message.
+    console.error('AI donor-summary error:', err);
+    return new Response(JSON.stringify({ error: 'Internal server error generating AI summary.' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
