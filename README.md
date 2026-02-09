@@ -23,6 +23,21 @@ The platform provides the following core API endpoints:
 - **Top Donations**: Access highest donation records
 - **Active Campaigns**: View currently running fundraising campaigns
 
+## 🤖 AI Summary
+
+- **What it is:** The AI Summary is an automatically generated, human-readable analysis produced by the application's AI service. It summarizes one or more donors and includes:
+  - Overview: totals, counts, and last-gift information.
+  - Insights: notable engagement signals, giving trends, and patterns.
+  - Recommendations: suggested stewardship or outreach actions.
+  - Donor Rundown: short per-donor summaries and suggested next actions.
+
+- **How it works:** The frontend sends donor data to the internal endpoint `/api/ai/donor-summary`. The server forwards the data to the configured AI provider (OpenAI) and returns structured JSON when possible. The client gracefully falls back to displaying raw text if the AI response cannot be parsed as JSON.
+
+- **Usage:** From the Donors page click a donor's "View AI Summary" button (or open a donor's detail page with `?summarize=1`) to generate the summary. The detail page and the Donor AI Summary modal render the readable summary rather than raw JSON.
+
+- **Privacy & configuration:** AI features require an API key (set `OPENAI_API_KEY` in `.env.local`). Avoid sending sensitive personal data to the AI provider unless you have appropriate consent and compliance controls in place.
+
+
 ## 🛠️ Tech Stack
 # DonorConnect
 
@@ -34,7 +49,6 @@ DonorConnect is an API-driven platform for managing donors, donations, and campa
 - **Donation Tracking**: Monitor donations with detailed records
 - **Campaign Management**: Create and manage fundraising campaigns
 - **RESTful API**: Clean JSON-based API endpoints
-- **Real-time Data**: Access recent donors, top donations, and active campaigns
 - **Full-Stack Integration**: Seamless frontend-to-backend data flow
 
 ## 🚀 Key Endpoints

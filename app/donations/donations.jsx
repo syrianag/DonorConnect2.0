@@ -204,7 +204,7 @@ export default function DonationsPage() {
               </select>
             </div>
 
-            <button className="btn-export"><Download /> Export</button>
+            
           </div>
         </section>
 
